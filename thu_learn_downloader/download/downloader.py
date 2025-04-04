@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from concurrent.futures import Executor, ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
+import re
 from typing import Optional, Self
 
 import dateutil.parser
@@ -269,14 +270,14 @@ class Downloader:
                 semester=semester,
                 course=course,
                 document_class=document_class,
-                document=document,
+                document_content=document,
                 index=index,
             ),
             description=description.document(
                 semester=semester,
                 course=course,
                 document_class=document_class,
-                document=document,
+                document_content=document,
                 index=index,
             ),
             remote_size=document.size,
@@ -300,8 +301,10 @@ class Downloader:
         self, semester: Semester, course: Course, homework: Homework
     ) -> None:
         readme_path: Path = filename.homework(
-            prefix=self.prefix, semester=semester, course=course, homework=homework
+            prefix=self.prefix, semester=semester, course=course, homework_content=homework
         )
+        readme_path = Path(re.sub(r'[<>:"\\|?*\x00-\x1F]', '_', str(readme_path)))
+
         os.makedirs(readme_path.parent, exist_ok=True)
         readme_path.write_text(homework.markdown)
         for attachment in homework.attachments:
@@ -312,14 +315,14 @@ class Downloader:
                     prefix=self.prefix,
                     semester=semester,
                     course=course,
-                    homework=homework,
-                    attachment=attachment,
+                    homework_content=homework,
+                    attachment_content=attachment,
                 ),
                 description=description.attachment(
                     semester=semester,
                     course=course,
                     homework=homework,
-                    attachment=attachment,
+                    attachment_content=attachment,
                 ),
                 style=style.HOMEWORK,
             )

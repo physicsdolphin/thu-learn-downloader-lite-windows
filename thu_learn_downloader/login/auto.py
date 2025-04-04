@@ -3,9 +3,9 @@ from . import bitwarden
 
 def username() -> str:
     try:
-        username: str = bitwarden.username()
-        if username:
-            return username
+        username_bitwarden: str = bitwarden.username()
+        if username_bitwarden:
+            return username_bitwarden
     except Exception:
         pass
     return ""
@@ -13,9 +13,9 @@ def username() -> str:
 
 def password() -> str:
     try:
-        password: str = bitwarden.password()
-        if password:
-            return password
+        password_bitwarden: str = bitwarden.password()
+        if password_bitwarden:
+            return password_bitwarden
     except Exception:
         pass
     return ""

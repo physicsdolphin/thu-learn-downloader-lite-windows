@@ -46,10 +46,31 @@ class Learn:
         assert status == "SUCCESS"
 
     @functools.cached_property
+    # def semesters(self) -> Sequence[Semester]:
+    #     return [
+    #         Semester(client=self.client, id=result)
+    #         for result in self.client.get_with_token(
+    #             url=url.make_url(path="/b/wlxt/kc/v_wlkc_xs_xktjb_coassb/queryxnxq")
+    #         ).json()
+    #     ]
     def semesters(self) -> Sequence[Semester]:
-        return [
-            Semester(client=self.client, id=result)
-            for result in self.client.get_with_token(
-                url=url.make_url(path="/b/wlxt/kc/v_wlkc_xs_xktjb_coassb/queryxnxq")
-            ).json()
-        ]
+        response = self.client.get_with_token(
+            url=url.make_url(path="/b/wlxt/kc/v_wlkc_xs_xktjb_coassb/queryxnxq")
+        )
+
+        if response.status_code != 200:
+            print("Request failed with status:", response.status_code)
+            return []
+
+        try:
+            data = response.json()
+            print("Parsed JSON:", data)  # Debugging output
+
+            # Filter out None values
+            filtered_data = [item for item in data if item is not None]
+        except Exception as e:
+            print("JSON decoding error:", e)
+            return []
+
+        return [Semester(client=self.client, id=result) for result in filtered_data]
+
