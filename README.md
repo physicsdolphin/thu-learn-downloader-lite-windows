@@ -62,3 +62,6 @@ $ tld [OPTIONS]
 - download pre-built binary form [GitHub Releases](https://github.com/liblaf/thu-learn-downloader/releases)
 - `pip install thu-learn-downloader`
 - `pipx install thu-learn-downloader`
+
+## test run command
+python.exe -m thu_learn_downloader.main

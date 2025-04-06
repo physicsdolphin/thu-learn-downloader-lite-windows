@@ -270,14 +270,14 @@ class Downloader:
                 semester=semester,
                 course=course,
                 document_class=document_class,
-                document_content=document,
+                document=document,
                 index=index,
             ),
             description=description.document(
                 semester=semester,
                 course=course,
                 document_class=document_class,
-                document_content=document,
+                document=document,
                 index=index,
             ),
             remote_size=document.size,
@@ -301,7 +301,7 @@ class Downloader:
         self, semester: Semester, course: Course, homework: Homework
     ) -> None:
         readme_path: Path = filename.homework(
-            prefix=self.prefix, semester=semester, course=course, homework_content=homework
+            prefix=self.prefix, semester=semester, course=course, homework=homework
         )
         readme_path = Path(re.sub(r'[<>:"\\|?*\x00-\x1F]', '_', str(readme_path)))
 
@@ -315,14 +315,14 @@ class Downloader:
                     prefix=self.prefix,
                     semester=semester,
                     course=course,
-                    homework_content=homework,
-                    attachment_content=attachment,
+                    homework=homework,
+                    attachment=attachment,
                 ),
                 description=description.attachment(
                     semester=semester,
                     course=course,
                     homework=homework,
-                    attachment_content=attachment,
+                    attachment=attachment,
                 ),
                 style=style.HOMEWORK,
             )

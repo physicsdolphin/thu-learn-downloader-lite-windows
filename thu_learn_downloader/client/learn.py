@@ -20,14 +20,14 @@ class Learn:
         self.client = Client(language, *args, **kwargs)
 
     def login(self, username: str, password: str) -> None:
-        response: Response = self.client.get(url=url.make_url())
+        response: Response = self.client.get(url=url.make_url(), verify=False)
         soup: BeautifulSoup = BeautifulSoup(
             markup=response.text, features="html.parser"
         )
         login_form: Tag = cast(Tag, soup.select_one(selector="#loginForm"))
         action: str = cast(str, login_form["action"])
         response: Response = self.client.post(
-            url=action, data={"i_user": username, "i_pass": password, "atOnce": True}
+            url=action, data={"i_user": username, "i_pass": password, "atOnce": True}, verify=False
         )
         soup: BeautifulSoup = BeautifulSoup(
             markup=response.text, features="html.parser"
@@ -36,13 +36,22 @@ class Learn:
         href: str = cast(str, a["href"])
         parse_result: ParseResult = urllib.parse.urlparse(url=href)
         query: dict[str, list[str]] = urllib.parse.parse_qs(qs=parse_result.query)
-        status, ticket = query["status"][0], query["ticket"][0]
-        self.client.get(url=href)
+        print("Query received:", query)
+
+        status = query.get("status", ["unknown"])[0]
+        ticket = query.get("ticket", [None])[0]
+        if ticket is None:
+            print("Login probably failed — no ticket received.")
+            print("Full query dict:", query)
+            return
+
+        self.client.get(url=href, verify=False)
         self.client.get(
             url=url.make_url(path="/b/j_spring_security_thauth_roaming_entry"),
             params={"ticket": ticket},
+            verify = False
         )
-        self.client.get(url=url.make_url(path="/f/wlxt/index/course/student/"))
+        self.client.get(url=url.make_url(path="/f/wlxt/index/course/student/"), verify=False)
         assert status == "SUCCESS"
 
     @functools.cached_property

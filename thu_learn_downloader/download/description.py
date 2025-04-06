@@ -8,18 +8,18 @@ def document(
     semester: Semester,
     course: Course,
     document_class: DocumentClass,
-    document_content: Document,
+    document: Document,
     index: int,
 ) -> str:
-    filename: str = f"{index:02d}-{document_content.title}"
-    if document_content.file_type:
-        filename += "." + document_content.file_type
+    filename: str = f"{index:02d}-{document.title}"
+    if document.file_type:
+        filename += "." + document.file_type
     return f"{course.name} > {filename}"
 
 
 def attachment(
-    semester: Semester, course: Course, homework: Homework, attachment_content: Attachment
+    semester: Semester, course: Course, homework: Homework, attachment: Attachment
 ) -> str:
     return (
-        f"{course.name} > {homework.number:02d}-{homework.title} > {attachment_content.type_}"
+        f"{course.name} > {homework.number:02d}-{homework.title} > {attachment.type_}"
     )

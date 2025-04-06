@@ -11,7 +11,7 @@ def document(
     semester: Semester,
     course: Course,
     document_class: DocumentClass,
-    document_content: Document,
+    document: Document,
     index: int,
 ) -> Path:
     filename: Path = (
@@ -20,22 +20,22 @@ def document(
         / course.name
         / "docs"
         / document_class.title
-        / f"{index:02d}-{document_content.title}".replace("/", "-slash-")
+        / f"{index:02d}-{document.title}".replace("/", "-slash-")
     )
-    if document_content.file_type:
-        filename = filename.with_suffix("." + document_content.file_type)
+    if document.file_type:
+        filename = filename.with_suffix("." + document.file_type)
     return filename
 
 
 def homework(
-    prefix: Path, semester: Semester, course: Course, homework_content: Homework
+    prefix: Path, semester: Semester, course: Course, homework: Homework
 ) -> Path:
     return (
         prefix
         / semester.id
         / course.name
         / "work"
-        / f"{homework_content.number:02d}-{homework_content.title}".replace("/", "-slash-")
+        / f"{homework.number:02d}-{homework.title}".replace("/", "-slash-")
         / "README.md"
     )
 
@@ -44,12 +44,12 @@ def attachment(
     prefix: Path,
     semester: Semester,
     course: Course,
-    homework_content: Homework,
-    attachment_content: Attachment,
+    homework: Homework,
+    attachment: Attachment,
 ) -> Path:
-    filename: Path = Path(attachment_content.name)
+    filename: Path = Path(attachment.name)
     filename = filename.with_stem(
-        f"{homework_content.number:02d}-{homework_content.title}-{attachment_content.type_}".replace(
+        f"{homework.number:02d}-{homework.title}-{attachment.type_}".replace(
             "/", "-slash-"
         )
     )
@@ -58,6 +58,6 @@ def attachment(
         / semester.id
         / course.name
         / "work"
-        / f"{homework_content.number:02d}-{homework_content.title}".replace("/", "-slash-")
+        / f"{homework.number:02d}-{homework.title}".replace("/", "-slash-")
         / filename
     )

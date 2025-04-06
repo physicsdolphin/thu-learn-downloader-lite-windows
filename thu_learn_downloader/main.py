@@ -5,15 +5,16 @@ from typing import Annotated
 import typer
 from typer import Option, Typer
 
-from .client.client import Language
-from .client.learn import Learn
-from .common.logging import LogLevel
-from .download.downloader import Downloader
-from .download.selector import Selector
-from .login import auto as login
+from thu_learn_downloader.client.client import Language
+from thu_learn_downloader.client.learn import Learn
+from thu_learn_downloader.common.logging import LogLevel
+from thu_learn_downloader.download.downloader import Downloader
+from thu_learn_downloader.download.selector import Selector
+from thu_learn_downloader.login import auto as login
+# import os
+# os.environ['OPENSSL_CONF'] = r'D:\git-repo\thu-learn-downloader\thu_learn_downloader\openssl.conf'
 
 app: Typer = Typer(name="tld")
-
 
 @app.command()
 def main(
@@ -23,7 +24,7 @@ def main(
     prefix: Annotated[Path, Option(file_okay=False, writable=True)] = Path.home()  # noqa: B008
     / "thu-learn",
     semesters: Annotated[list[str], Option("-s", "--semester")] = [  # noqa: B006
-        "2023-2024-1"
+        "2023-2024-5"
     ],
     courses: Annotated[list[str], Option("-c", "--course")] = [],  # noqa: B006
     document: Annotated[bool, Option()] = True,
