@@ -1,3 +1,6 @@
+import urllib3
+urllib3.disable_warnings()
+
 import logging
 from pathlib import Path
 from typing import Annotated
@@ -11,8 +14,6 @@ from thu_learn_downloader.common.logging import LogLevel
 from thu_learn_downloader.download.downloader import Downloader
 from thu_learn_downloader.download.selector import Selector
 from thu_learn_downloader.login import auto as login
-# import os
-# os.environ['OPENSSL_CONF'] = r'D:\git-repo\thu-learn-downloader\thu_learn_downloader\openssl.conf'
 
 app: Typer = Typer(name="tld")
 

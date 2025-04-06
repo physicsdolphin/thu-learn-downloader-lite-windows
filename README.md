@@ -65,3 +65,7 @@ $ tld [OPTIONS]
 
 ## test run command
 python.exe -m thu_learn_downloader.main
+
+## exe packing
+- run in project root: 
+.\.venv\Scripts\pyinstaller.exe --onefile --clean --add-data "thu_learn_downloader/openssl.conf;thu_learn_downloader" .\thu_learn_downloader\main.py --runtime-hook .\thu_learn_downloader\hook.py
