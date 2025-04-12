@@ -306,7 +306,7 @@ class Downloader:
         readme_path = Path(re.sub(r'[<>:"\\|?*\x00-\x1F]', '_', str(readme_path)))
 
         os.makedirs(readme_path.parent, exist_ok=True)
-        readme_path.write_text(homework.markdown)
+        # readme_path.write_text(homework.markdown)
         for attachment in homework.attachments:
             self.sync_file(
                 client=homework.client,

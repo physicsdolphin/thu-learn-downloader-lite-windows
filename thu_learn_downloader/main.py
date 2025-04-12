@@ -1,3 +1,13 @@
+import os
+# Determine the path for openssl.conf based on whether it's running from the executable or source code
+config_path = os.path.join(os.path.dirname(__file__), 'openssl.conf')
+
+# Now you can use config_path to load the openssl.conf file
+print(f"Config file path: {config_path}")
+os.environ['OPENSSL_CONF'] = config_path
+# this patch only works when directly run the project as module
+# for using pyinstaller-built release exe, refer to hook.py
+
 import urllib3
 urllib3.disable_warnings()
 
@@ -25,7 +35,7 @@ def main(
     prefix: Annotated[Path, Option(file_okay=False, writable=True)] = Path.home()  # noqa: B008
     / "thu-learn",
     semesters: Annotated[list[str], Option("-s", "--semester")] = [  # noqa: B006
-        "2023-2024-5"
+        "2024-2025-5"
     ],
     courses: Annotated[list[str], Option("-c", "--course")] = [],  # noqa: B006
     document: Annotated[bool, Option()] = True,
@@ -35,9 +45,10 @@ def main(
     log_level: Annotated[LogLevel, Option(envvar="LOG_LEVEL")] = LogLevel.INFO,
 ) -> None:
     logging.getLogger().setLevel(log_level)
+
     username = username or login.username() or typer.prompt(text="Username")
     password = (
-        password or login.password() or typer.prompt(text="Password", hide_input=True)
+            password or login.password() or typer.prompt(text="Password", hide_input=True)
     )
     learn: Learn = Learn(language=language)
     learn.login(username=username, password=password)
