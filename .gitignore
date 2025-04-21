@@ -16,6 +16,7 @@ build/
 develop-eggs/
 dist/*.txt
 dist/downloads
+dist/*.py
 downloads/
 eggs/
 .eggs/
