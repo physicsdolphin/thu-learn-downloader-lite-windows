@@ -185,3 +185,4 @@ pyrightconfig.json
 *.png
 assets
 frames
+.github/
