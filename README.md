@@ -61,13 +61,13 @@ $ tld [OPTIONS]
 
 ## Installation
 
-- download pre-built binary form [GitHub Releases](https://github.com/liblaf/thu-learn-downloader/releases)
-- `pip install thu-learn-downloader`
-- `pipx install thu-learn-downloader`
+- download released binary
+- 
+## test run 
 
-## test run command
-python.exe -m thu_learn_downloader.main
+run thu-learn-downloader-windows-x86_64.exe in cmd or powershell.
 
 ## exe packing
+
 - run in project root: 
 .\.venv\Scripts\pyinstaller.exe --onefile --clean --add-data "thu_learn_downloader/openssl.conf;thu_learn_downloader" .\thu_learn_downloader\main.py --runtime-hook .\thu_learn_downloader\hook.py
