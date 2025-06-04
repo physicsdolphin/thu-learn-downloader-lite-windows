@@ -62,7 +62,7 @@ $ tld [OPTIONS]
 ## Installation
 
 - download released binary
-- 
+
 ## test run 
 
 run thu-learn-downloader-windows-x86_64.exe in cmd or powershell.
