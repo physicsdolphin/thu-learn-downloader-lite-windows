@@ -1,3 +1,5 @@
+# Modified from original repo:
+https://github.com/liblaf/thu-learn-downloader
 # THU Web Learning Downloader
 
 Download everything from Web Learning of Tsinghua University
