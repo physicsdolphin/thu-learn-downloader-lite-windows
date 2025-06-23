@@ -1,3 +1,10 @@
+# WARNING:
+**Test run on 2025-06-23 17:00 has shown that 2FA method is appended to normal login procedure.**
+
+**Currently the program will be UNUSABLE.**
+
+**Will be working on a version with manually cookie parameter injection.**
+
 # Modified from original repo:
 https://github.com/liblaf/thu-learn-downloader
 # THU Web Learning Downloader
