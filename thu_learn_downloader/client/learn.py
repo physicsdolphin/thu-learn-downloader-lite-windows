@@ -1,15 +1,13 @@
 import functools
 import re
-from playwright.sync_api import sync_playwright
-from requests.cookies import RequestsCookieJar
 from collections.abc import Sequence
-from urllib.parse import ParseResult
 
 from bs4 import BeautifulSoup, Tag
+from playwright.sync_api import sync_playwright
 from requests import Response
+from requests.cookies import RequestsCookieJar
 
 from thu_learn_downloader.common.typing import cast
-
 from . import url
 from .client import Client, Language
 from .semester import Semester
