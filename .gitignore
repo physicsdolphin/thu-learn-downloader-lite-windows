@@ -14,9 +14,7 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/*.txt
-dist/downloads
-dist/*.py
+dist/
 downloads/
 eggs/
 .eggs/
