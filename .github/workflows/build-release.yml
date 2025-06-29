@@ -29,8 +29,9 @@ jobs:
           .\.venv\Scripts\pip install pyinstaller playwright
 
       - name: Install Playwright Chromium
+        shell: pwsh
         run: |
-          setx PLAYWRIGHT_BROWSERS_PATH "0"
+          $env:PLAYWRIGHT_BROWSERS_PATH="0"
           .\.venv\Scripts\playwright install chromium
 
       - name: Build executable with PyInstaller
