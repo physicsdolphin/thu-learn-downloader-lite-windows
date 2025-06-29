@@ -1,0 +1,66 @@
+name: Build and Release Candidate
+
+on:
+  push:
+    tags:
+      - "v*.*.*-rc*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create virtual environment
+        run: python -m venv .venv
+
+      - name: Activate venv and install requirements
+        run: |
+          .\.venv\Scripts\pip install --upgrade pip
+          .\.venv\Scripts\pip install -r requirements.txt
+          .\.venv\Scripts\pip install pyinstaller playwright
+
+      - name: Install Playwright Chromium
+        run: |
+          setx PLAYWRIGHT_BROWSERS_PATH "0"
+          .\.venv\Scripts\playwright install chromium
+
+      - name: Build executable with PyInstaller
+        run: |
+          .\.venv\Scripts\pyinstaller.exe ^
+            --onefile ^
+            --clean ^
+            --add-data "thu_learn_downloader/openssl.conf;thu_learn_downloader" ^
+            .\thu_learn_downloader\main.py ^
+            --runtime-hook .\thu_learn_downloader\hook.py
+
+      - name: Upload built executable as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: thu_learn_downloader_exe
+          path: dist/*.exe
+
+  release:
+    needs: build
+    runs-on: windows-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: thu_learn_downloader_exe
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          files: |
+            *.exe
