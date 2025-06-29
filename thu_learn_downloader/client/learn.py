@@ -1,5 +1,7 @@
 import functools
-import urllib.parse
+import re
+from playwright.sync_api import sync_playwright
+from requests.cookies import RequestsCookieJar
 from collections.abc import Sequence
 from urllib.parse import ParseResult
 
@@ -24,35 +26,35 @@ class Learn:
         soup: BeautifulSoup = BeautifulSoup(
             markup=response.text, features="html.parser"
         )
-        login_form: Tag = cast(Tag, soup.select_one(selector="#loginForm"))
-        action: str = cast(str, login_form["action"])
-        response: Response = self.client.post(
-            url=action, data={"i_user": username, "i_pass": password, "atOnce": True}, verify=False
-        )
-        soup: BeautifulSoup = BeautifulSoup(
-            markup=response.text, features="html.parser"
-        )
-        a: Tag = cast(Tag, soup.select_one(selector="a"))
-        href: str = cast(str, a["href"])
-        parse_result: ParseResult = urllib.parse.urlparse(url=href)
-        query: dict[str, list[str]] = urllib.parse.parse_qs(qs=parse_result.query)
-        print("Query received:", query)
+        login_button: Tag = cast(Tag, soup.select_one(selector="#loginButtonId"))
+        onclick: str = cast(str, login_button["onclick"])
+        login_url: str = cast(str, re.search(r"'(https?://[^']+)'", onclick).group(1))
 
-        status = query.get("status", ["unknown"])[0]
-        ticket = query.get("ticket", [None])[0]
-        if ticket is None:
-            print("Login probably failed — no ticket received.")
-            print("Full query dict:", query)
-            return
+        jar = RequestsCookieJar()
 
-        self.client.get(url=href, verify=False)
-        self.client.get(
-            url=url.make_url(path="/b/j_spring_security_thauth_roaming_entry"),
-            params={"ticket": ticket},
-            verify = False
-        )
-        self.client.get(url=url.make_url(path="/f/wlxt/index/course/student/"), verify=False)
-        assert status == "SUCCESS"
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=False)
+            context = browser.new_context()
+            page = context.new_page()
+            page.goto(login_url)
+            page.fill("#i_user", username)
+            page.fill("#i_pass", password)
+            page.evaluate("doLogin()")
+
+            page.wait_for_url(re.compile(r"learn\.tsinghua\.edu\.cn/.*"), timeout=300_000)
+
+            cookies = context.cookies()
+            for cookie in cookies:
+                jar.set(
+                    name=cookie['name'],
+                    value=cookie['value'],
+                    domain=cookie.get('domain'),
+                    path=cookie.get('path', '/'),
+                )
+
+            browser.close()
+
+        self.client.cookies.update(jar)
 
     @functools.cached_property
     # def semesters(self) -> Sequence[Semester]:
@@ -70,6 +72,8 @@ class Learn:
         if response.status_code != 200:
             print("Request failed with status:", response.status_code)
             return []
+
+        print(response.text)
 
         try:
             data = response.json()
