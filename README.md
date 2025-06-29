@@ -70,6 +70,21 @@ For Linux users, refer to [this guide](README_linux.md)
 run thu-learn-downloader-windows-x86_64.exe in cmd or powershell.
 
 ## exe packing
-
-- run in project root: 
+- run in project root:
+- please install playwright directly in venv using:
+```powershell
+$env:PLAYWRIGHT_BROWSERS_PATH="0"
+playwright install chromium
+```
+(please refer to:https://playwright.dev/python/docs/library#pyinstaller)
+then:
+```powershell
 .\.venv\Scripts\pyinstaller.exe --onefile --clean --add-data "thu_learn_downloader/openssl.conf;thu_learn_downloader" .\thu_learn_downloader\main.py --runtime-hook .\thu_learn_downloader\hook.py
+```
+## exe recommended usage
+```powershell
+.\thu-learn-downloader-windows-x86_64.exe -u [USERNAME] -p [PASSWORD] -s [SEMESTER]
+```
+NOTICE THAT PASSWORD WILL NOT BE REDACTED!!!
+
+then complete 2FA in prompted browser panel.
