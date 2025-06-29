@@ -73,8 +73,6 @@ class Learn:
             print("Request failed with status:", response.status_code)
             return []
 
-        print(response.text)
-
         try:
             data = response.json()
             print("Parsed JSON:", data)  # Debugging output
