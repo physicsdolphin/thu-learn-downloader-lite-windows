@@ -39,6 +39,7 @@ jobs:
           .\.venv\Scripts\pyinstaller.exe `
             --onefile `
             --clean `
+            --name thu-learn-downloader-windows-x86_64 `
             --add-data "thu_learn_downloader/openssl.conf;thu_learn_downloader" `
             .\thu_learn_downloader\main.py `
             --runtime-hook .\thu_learn_downloader\hook.py
