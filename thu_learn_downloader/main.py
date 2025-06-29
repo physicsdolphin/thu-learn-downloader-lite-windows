@@ -34,9 +34,7 @@ def main(
     *,
     prefix: Annotated[Path, Option(file_okay=False, writable=True)] = Path.home()  # noqa: B008
     / "thu-learn",
-    semesters: Annotated[list[str], Option("-s", "--semester")] = [  # noqa: B006
-        "2024-2025-5"
-    ],
+    semesters: Annotated[list[str], Option("-s", "--semester")] = [],
     courses: Annotated[list[str], Option("-c", "--course")] = [],  # noqa: B006
     document: Annotated[bool, Option()] = True,
     homework: Annotated[bool, Option()] = True,
@@ -50,6 +48,9 @@ def main(
     password = (
             password or login.password() or typer.prompt(text="Password", hide_input=True)
     )
+    if not semesters:
+        input_sem = typer.prompt(text="Semester (comma-separated)")
+        semesters = [s.strip() for s in input_sem.split(",")]
     learn: Learn = Learn(language=language)
     learn.login(username=username, password=password)
     with Downloader(
